@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  data-analyser-backend:
+    build: ./data-analyser-backend
+    container_name: data-analyser-backend
+    ports:
+      - 8010:8010
+
+  data-analyser-front:
+    build: ./data-analyser-frontend
+    container_name: data-analyser-frontend
+    ports:
+      - 4200:80
+    links:
+      - data-analyser-backend
