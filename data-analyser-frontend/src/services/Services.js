@@ -20,7 +20,6 @@ class Services {
       vueinstance.$notification.warning("No file found, please Upload a file first!")
       return
     }
-
     return http.get("/api/columns/" + file_name);
   }
   get_side_effect_columns(vueinstance, columns) {
@@ -41,8 +40,9 @@ class Services {
     return http.post("/api/columns/cells/" + file_name,
       { columns: columns });
   }
-  getMatrix(vueinstance) {
-    let file_name = localStorage.getItem('file_name')
+  getMatrix(vueinstance, file_name = "") {
+    if (!file_name)
+      file_name = localStorage.getItem('file_name')
     if (!file_name) {
       vueinstance.$notification.warning("No file found, please Upload a file first!")
       return

@@ -9,7 +9,7 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const routes = [
-  
+
   { name: 'welcome', path: '/', component: Welcome },
   { name: 'upload', path: '/upload', component: FileUploader },
   { name: 'analyzer', path: '/analyzer', component: Analyzer },
@@ -20,6 +20,6 @@ const routes = [
   },
 ]
 export default new VueRouter({
-    mode:'history',
-  routes:routes
+  mode: 'history',
+  routes: routes
 })

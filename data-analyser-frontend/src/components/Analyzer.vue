@@ -387,10 +387,7 @@ export default {
     },
 
     select_side_effect_columns() {
-      Services.get_side_effect_columns(
-        this.$notification,
-        this.matrix_headers
-      )
+      Services.get_side_effect_columns(this.$notification, this.matrix_headers)
         .then((resp) => {
           let response = resp.data;
           if (response.error) this.$notification.error(response.message);
@@ -404,10 +401,7 @@ export default {
         });
     },
     select_cells_columns() {
-      Services.get_cells_columns(
-        this.$notification,
-        this.matrix_headers
-      )
+      Services.get_cells_columns(this.$notification, this.matrix_headers)
         .then((resp) => {
           let response = resp.data;
           if (response.error) this.$notification.error(response.message);
