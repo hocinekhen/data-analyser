@@ -172,17 +172,13 @@ export default {
       this.first_column = "";
       this.second_columns = [];
       this.second_column = "";
-      console.log("kdjfdkfj");
       console.log(newVal, oldVal);
     },
   },
   methods: {
     first_column_select_change(columns) {
       console.log(columns);
-      if (
-        this.selected_headers.length > 0 &&
-        this.selected_headers.length > 1
-      ) {
+      if (this.selected_headers.length > 1) {
         let lastcolumn = this.selected_headers[
           this.selected_headers.length - 1
         ];
@@ -192,12 +188,13 @@ export default {
     },
     second_column_select_change(columns) {
       console.log(columns);
-      if (this.second_columns.length > 0 && this.second_columns.length > 1) {
+      if (this.second_columns.length > 1) {
         let lastcolumn = this.second_columns[this.second_columns.length - 1];
         this.second_columns = [];
         this.second_columns.push(lastcolumn);
       }
     },
+
     calculateRegression() {
       Services.calculateRegression(
         this.$notification,
@@ -207,16 +204,15 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            if (!response._Matrix__columns.length == 0) {
-              //this.matrix_headers = response._Matrix__columns
-              this.regression_x = response.regression_coeff.a.toFixed(3);
-              this.regression_y = response.regression_coeff.b.toFixed(2);
-              //this.matrix = response._Matrix__matrix
-              this.updateData(response._Matrix__matrix);
-              this.$notification.success("Regression Info are ready!");
-            }
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
+          }
+          if (!response._Matrix__columns.length == 0) {
+            this.regression_x = response.regression_coeff.a.toFixed(3);
+            this.regression_y = response.regression_coeff.b.toFixed(2);
+            this.updateData(response._Matrix__matrix);
+            this.$notification.success("Regression Info are ready!");
           }
         })
         .catch((error) => {
@@ -224,6 +220,7 @@ export default {
           this.$notification.warning(error_message);
         });
     },
+
     drawLinePoints(x, y) {
       console.log(x, y);
       let minpoint = {
@@ -236,12 +233,14 @@ export default {
       };
       this.option.series[0].markLine.data = [[minpoint, maxpoint]];
     },
+
     updateData(data) {
       this.option.series[0].data = data;
       console.log([(0 - this.regression_y) / this.regression_x, 0]);
       this.drawLinePoints(this.regression_x, this.regression_y);
     },
-    drawRegression() {
+
+    getscatterOptions() {
       var dataAll = [];
 
       var markLineOpt = {
@@ -304,15 +303,7 @@ export default {
         tooltip: {
           formatter: " {a}: ({c})",
         },
-        xAxis: [
-          { gridIndex: 0, min: 0, max: 1.2 },
-          /*{
-          ticks: {
-         min: Math.min.apply(this, data_array) - 5,
-         max: Math.max.apply(this, data_array) + 5
-      }
-        }*/
-        ],
+        xAxis: [{ gridIndex: 0, min: 0, max: 1.2 }],
         yAxis: [{ gridIndex: 0, min: 0, max: 1.1 }],
         series: [
           {
@@ -328,11 +319,11 @@ export default {
       return option;
     },
   },
+
   mounted() {
-    this.option = this.drawRegression();
-    if (this.calculate_on_mount) {
-      this.calculateRegression();
-    }
+    this.option = this.getscatterOptions();
+    if (!this.calculate_on_mount) return;
+    this.calculateRegression();
   },
 };
 </script>

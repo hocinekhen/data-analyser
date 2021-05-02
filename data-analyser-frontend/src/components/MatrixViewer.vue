@@ -50,9 +50,9 @@ export default {
       console.log(newVal, oldVal);
       this.convertMatrixToRecords(this.matrix);
     },
+    
     matrix: function (newVal, oldVal) {
       console.log(newVal, oldVal);
-      console.log(this.matrix_headers);
       console.log(newVal);
 
       this.convertMatrixToRecords(newVal);
@@ -93,6 +93,7 @@ export default {
         this.records.push(newRecord);
       }
     },
+
     filterText(value, search, item) {
       console.log(item);
       return (

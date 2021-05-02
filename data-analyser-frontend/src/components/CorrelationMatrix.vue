@@ -123,6 +123,7 @@ export default {
         this.records.push(newRecord);
       }
     },
+    
     filterText(value, search, item) {
       console.log(item);
       return (
@@ -132,12 +133,12 @@ export default {
         value.toString().toLowerCase().indexOf(search.toLowerCase()) !== -1
       );
     },
+
     column_select_change() {
       //this.calculateCorrelation(this.selected_headers)
     },
+
     calculateCorrelation() {
-      console.log("cooorelaaation");
-      console.log(this.matrix);
       Services.calculateCorrelation(
         this.$notification,
         this.selected_headers,
@@ -146,18 +147,19 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            if (!response._Matrix__columns.length == 0)
-              this.correlation_headers = response._Matrix__columns;
-            //this.matrix = response.data.data._Matrix__matrix
-            this.convertMatrixToRecords(
-              response._Matrix__matrix,
-              response._Matrix__columns
-            );
-
-            this.$notification.success("Correlation matrix is ready!");
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          if (!response._Matrix__columns.length == 0)
+            this.correlation_headers = response._Matrix__columns;
+          //this.matrix = response.data.data._Matrix__matrix
+          this.convertMatrixToRecords(
+            response._Matrix__matrix,
+            response._Matrix__columns
+          );
+
+          this.$notification.success("Correlation matrix is ready!");
         })
         .catch((error) => {
           let error_message = error.response.data.message;
@@ -166,10 +168,9 @@ export default {
     },
   },
   mounted() {
-    if (this.calculate_on_mount) {
-      this.selected_headers = this.all_headers;
-      this.calculateCorrelation();
-    }
+    if (!this.calculate_on_mount) return;
+    this.selected_headers = this.all_headers;
+    this.calculateCorrelation();
   },
 };
 </script>

@@ -191,6 +191,7 @@ export default {
         this.selected_headers.push(lastcolumn);
       }
     },
+    
     second_column_select_change(columns) {
       console.log(columns);
       if (this.second_columns.length > 1) {
@@ -199,6 +200,7 @@ export default {
         this.second_columns.push(lastcolumn);
       }
     },
+
     values_column_select_change(columns) {
       console.log(columns);
       if (this.values_columns.length > 1) {
@@ -207,6 +209,7 @@ export default {
         this.values_columns.push(lastcolumn);
       }
     },
+
     get_series() {
       Services.get_series(
         this.$notification,
@@ -231,13 +234,19 @@ export default {
           this.$notification.warning(error_message);
         });
     },
+
     updateData(data) {
       this.show_chart = false;
       this.option.series = [];
-      this.option = this.drawBarChart(data.axis_x, data.axis_y, data.groups);
+      this.option = this.getBarChartOptions(
+        data.axis_x,
+        data.axis_y,
+        data.groups
+      );
       this.show_chart = true;
     },
-    drawBarChart(axis_x, series, groups) {
+
+    getBarChartOptions(axis_x, series, groups) {
       series.forEach((element) => {
         element.type = "line";
         element.label = this.labelOption;
@@ -354,9 +363,8 @@ export default {
     },
   },
   mounted() {
-    if (this.calculate_on_mount) {
-      this.get_series();
-    }
+    if (!this.calculate_on_mount) return;
+    this.get_series();
   },
 };
 </script>

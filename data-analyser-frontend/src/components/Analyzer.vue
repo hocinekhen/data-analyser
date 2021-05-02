@@ -298,25 +298,24 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.matrix = response._Matrix__matrix;
-
-            this.matrix_headers = response._Matrix__columns;
-            this.selected_merge_headers = [];
-            this.selected_filter_columns = [];
-            this.selected_group_headers = [];
-            this.$notification.success("Columns Merged!");
-            console.log(this.matrix);
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.matrix = response._Matrix__matrix;
+          this.matrix_headers = response._Matrix__columns;
+          this.selected_merge_headers = [];
+          this.selected_filter_columns = [];
+          this.selected_group_headers = [];
+          this.$notification.success("Columns Merged!");
         })
         .catch((error) => {
           let error_message = error.response.data.message;
           this.$notification.warning(error_message);
         });
     },
+    
     group_columns() {
-      console.log(this.selected_group_headers);
       Services.group_columns(
         this.$notification,
         this.selected_group_headers,
@@ -325,20 +324,20 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.matrix = response._Matrix__matrix;
-
-            this.matrix_headers = response._Matrix__columns;
-            this.$notification.success("Columns Grouped!");
-            console.log(this.matrix);
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.matrix = response._Matrix__matrix;
+          this.matrix_headers = response._Matrix__columns;
+          this.$notification.success("Columns Grouped!");
         })
         .catch((error) => {
           let error_message = error.response.data.message;
           this.$notification.warning(error_message);
         });
     },
+
     filter_by_column() {
       console.log(this.selected_group_headers);
       Services.filter_by_column(
@@ -351,34 +350,35 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.matrix = response._Matrix__matrix;
-
-            this.matrix_headers = response._Matrix__columns;
-            this.$notification.success("Column Filtered!");
-            console.log(this.matrix);
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.matrix = response._Matrix__matrix;
+          this.matrix_headers = response._Matrix__columns;
+          this.$notification.success("Column Filtered!");
+          console.log(this.matrix);
         })
         .catch((error) => {
           let error_message = error.response.data.message;
           this.$notification.warning(error_message);
         });
     },
+
     get_matrix() {
       Services.getMatrix(this.$notification)
         .then((resp) => {
           let response = resp.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.matrix = response.data._Matrix__matrix;
-
-            this.matrix_headers = response.data._Matrix__columns;
-            this.selected_merge_headers = [];
-            this.selected_filter_columns = [];
-            this.selected_group_headers = [];
-            console.log(this.matrix);
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.matrix = response.data._Matrix__matrix;
+          this.matrix_headers = response.data._Matrix__columns;
+          this.selected_merge_headers = [];
+          this.selected_filter_columns = [];
+          this.selected_group_headers = [];
+          console.log(this.matrix);
         })
         .catch((error) => {
           let error_message = error.response.data.message;
@@ -390,24 +390,27 @@ export default {
       Services.get_side_effect_columns(this.$notification, this.matrix_headers)
         .then((resp) => {
           let response = resp.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.selected_merge_headers = response.data;
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.selected_merge_headers = response.data;
         })
         .catch((error) => {
           let error_message = error.response.data.message;
           this.$notification.warning(error_message);
         });
     },
+
     select_cells_columns() {
       Services.get_cells_columns(this.$notification, this.matrix_headers)
         .then((resp) => {
           let response = resp.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.selected_merge_headers = response.data;
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.selected_merge_headers = response.data;
         })
         .catch((error) => {
           let error_message = error.response.data.message;

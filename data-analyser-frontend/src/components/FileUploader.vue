@@ -54,6 +54,7 @@ export default {
       this.progress = 0;
       this.currentFile = file;
     },
+    
     upload() {
       if (!this.currentFile) {
         this.message = "Please select a file!";

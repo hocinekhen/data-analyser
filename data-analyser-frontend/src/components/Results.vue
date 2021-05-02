@@ -214,27 +214,29 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) console.log(response.error);
-          else {
-            this.merged_matrix = response._Matrix__matrix;
-
-            this.merged_headers = response._Matrix__columns;
-            if (new_column_name == this.no_side_cells_column_name)
-              this.select_side_effect_columns(this.merged_headers);
-            else {
-              this.matrix_to_correlate = [...this.merged_matrix];
-              this.group_columns(this.merged_matrix, this.merged_headers, [
-                "Hour",
-                this.target_parameter,
-              ]);
-            }
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.merged_matrix = response._Matrix__matrix;
+
+          this.merged_headers = response._Matrix__columns;
+          if (new_column_name == this.no_side_cells_column_name) {
+            this.select_side_effect_columns(this.merged_headers);
+            return;
+          }
+          this.matrix_to_correlate = [...this.merged_matrix];
+          this.group_columns(this.merged_matrix, this.merged_headers, [
+            "Hour",
+            this.target_parameter,
+          ]);
         })
         .catch((error) => {
           let error_message = error.response.data.message;
           this.$notification.warning(error_message);
         });
     },
+
     group_columns(matrix, columns, columns_to_group) {
       console.log(this.selected_group_headers);
       ResultsServices.group_columns(
@@ -245,11 +247,12 @@ export default {
       )
         .then((resp) => {
           let response = resp.data.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.grouped_matrix = response._Matrix__matrix;
-            this.result_is_ready = true;
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.grouped_matrix = response._Matrix__matrix;
+          this.result_is_ready = true;
         })
         .catch((error) => {
           let error_message = error.response.data.message;
@@ -262,13 +265,13 @@ export default {
       ResultsServices.getMatrix(this.$notification, "users.csv")
         .then((resp) => {
           let response = resp.data;
-          if (response.error) this.$notification.error(response.message);
-          else {
-            this.matrix = response.data._Matrix__matrix;
-
-            this.matrix_headers = response.data._Matrix__columns;
-            console.log(this.matrix);
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.matrix = response.data._Matrix__matrix;
+
+          this.matrix_headers = response.data._Matrix__columns;
         })
         .catch((error) => {
           let error_message = error.response.data.message;
@@ -280,23 +283,26 @@ export default {
       ResultsServices.get_side_effect_columns(this.$notification, columns)
         .then((resp) => {
           let response = resp.data;
-          if (response.error) console.log(response.error);
-          else {
-            this.side_effect_columns = response.data;
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.side_effect_columns = response.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    
     select_cells_columns(columns) {
       ResultsServices.get_cells_columns(this.$notification, columns)
         .then((resp) => {
           let response = resp.data;
-          if (response.error) console.log(response.error);
-          else {
-            this.no_side_cells = response.data;
+          if (response.error) {
+            this.$notification.error(response.message);
+            return;
           }
+          this.no_side_cells = response.data;
         })
         .catch((error) => {
           console.log(error);
